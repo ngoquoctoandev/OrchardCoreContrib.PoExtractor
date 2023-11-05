@@ -1,7 +1,8 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using OrchardCoreContrib.PoExtractor.DotNet.CS.MetadataProviders;
 
-namespace OrchardCoreContrib.PoExtractor.DotNet.CS.MetadataProviders.Tests;
+namespace OrchardCoreContrib.PoExtractor.DotNet.CS.Tests.MetadataProviders;
 
 public class CSharpMetadataProviderTests
 {

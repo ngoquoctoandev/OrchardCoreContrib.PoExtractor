@@ -1,111 +1,91 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.Text;
+using OrchardCoreContrib.PoExtractor.Abstractions;
 
-namespace OrchardCoreContrib.PoExtractor
+namespace OrchardCoreContrib.PoExtractor;
+
+/// <summary>
+///     Writes <see cref="LocalizableString" /> objects in the <see href="https://www.gnu.org/software/gettext/manual/html_node/PO-Files.html">Portable Object format</see> to a stream
+/// </summary>
+public class PoWriter : IDisposable
 {
+    public const string PortaleObjectTemplateExtension = ".pot";
+
+    private readonly TextWriter _writer;
+
     /// <summary>
-    /// Writes <see cref="LocalizableString"/> objects in the <see href="https://www.gnu.org/software/gettext/manual/html_node/PO-Files.html">Portable Object format</see> to a stream
+    ///     Creates a new instance of the <see cref="PoWriter" />, that writes records to the file
     /// </summary>
-    public class PoWriter : IDisposable
+    /// <param name="path">the path to the file</param>
+    /// <remarks>This function creates a new file or overwrites the existing file, if it already exists</remarks>
+    public PoWriter(string path) => _writer = new StreamWriter(File.Create(path));
+
+    /// <summary>
+    ///     Creates a new instance of the <see cref="PoWriter" />, that writes records to the stream
+    /// </summary>
+    /// <param name="stream"></param>
+    public PoWriter(Stream stream) => _writer = new StreamWriter(stream);
+
+    /// <inheritdoc />
+    public void Dispose()
     {
-        public const string PortaleObjectTemplateExtension = ".pot";
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 
-        private readonly TextWriter _writer;
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="PoWriter"/>, that writes records to the file
-        /// </summary>
-        /// <param name="path">the path to the file</param>
-        /// <remarks>This function creates a new file or overwrites the existing file, if it already exists</remarks>
-        public PoWriter(string path)
+    /// <summary>
+    ///     Writes a <see cref="LocalizableString" /> object to the output
+    /// </summary>
+    /// <param name="record">the object to write</param>
+    public void WriteRecord(LocalizableString record)
+    {
+        foreach (var location in record.Locations)
         {
-            _writer = new StreamWriter(File.Create(path));
+            _writer.WriteLine($"#: {location.SourceFile}:{location.SourceFileLine}");
+
+            if (!string.IsNullOrEmpty(location.Comment)) _writer.WriteLine($"#. {location.Comment}");
         }
 
-        /// <summary>
-        /// Creates a new instance of the <see cref="PoWriter"/>, that writes records to the stream
-        /// </summary>
-        /// <param name="stream"></param>
-        public PoWriter(Stream stream)
+        if (!string.IsNullOrEmpty(record.Context)) _writer.WriteLine($"msgctxt \"{Escape(record.Context)}\"");
+
+        _writer.WriteLine($"msgid \"{Escape(record.Text)}\"");
+
+        if (string.IsNullOrEmpty(record.TextPlural))
         {
-            _writer = new StreamWriter(stream);
+            _writer.WriteLine("msgstr \"\"");
+        }
+        else
+        {
+            _writer.WriteLine($"msgid_plural \"{Escape(record.TextPlural)}\"");
+            _writer.WriteLine("msgstr[0] \"\"");
         }
 
-        /// <summary>
-        /// Writes a <see cref="LocalizableString"/> object to the output
-        /// </summary>
-        /// <param name="record">the object to write</param>
-        public void WriteRecord(LocalizableString record)
+        _writer.WriteLine();
+    }
+
+    /// <summary>
+    ///     Writes a collection of <see cref="LocalizableString" /> objects to the output
+    /// </summary>
+    /// <param name="records">the collection to write</param>
+    public void WriteRecord(IEnumerable<LocalizableString> records)
+    {
+        foreach (var record in records) WriteRecord(record);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
         {
-            foreach (var location in record.Locations)
-            {
-                _writer.WriteLine($"#: {location.SourceFile}:{location.SourceFileLine}");
-
-                if (!string.IsNullOrEmpty(location.Comment))
-                {
-                    _writer.WriteLine($"#. {location.Comment}");
-                }
-            }
-
-            if (!string.IsNullOrEmpty(record.Context))
-            {
-                _writer.WriteLine($"msgctxt \"{Escape(record.Context)}\"");
-            }
-
-            _writer.WriteLine($"msgid \"{Escape(record.Text)}\"");
-
-            if (string.IsNullOrEmpty(record.TextPlural))
-            {
-                _writer.WriteLine($"msgstr \"\"");
-            }
-            else
-            {
-                _writer.WriteLine($"msgid_plural \"{Escape(record.TextPlural)}\"");
-                _writer.WriteLine($"msgstr[0] \"\"");
-            }
-
-
-            _writer.WriteLine();
+            _writer.Close();
+            _writer.Dispose();
         }
+    }
 
-        /// <summary>
-        /// Writes a collection of <see cref="LocalizableString"/> objects to the output
-        /// </summary>
-        /// <param name="records">the collection to write</param>
-        public void WriteRecord(IEnumerable<LocalizableString> records)
-        {
-            foreach (var record in records)
-            {
-                WriteRecord(record);
-            }
-        }
+    private static string Escape(string? text)
+    {
+        var sb = new StringBuilder(text);
+        sb.Replace("\\", """\\"""); // \ -> \\
+        sb.Replace("\"", "\\\"");   // " -> \"
 
-
-        /// <inheritdoc/>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _writer.Close();
-                _writer.Dispose();
-            }
-        }
-
-        private static string Escape(string text)
-        {
-            var sb = new StringBuilder(text);
-            sb.Replace("\\", "\\\\"); // \ -> \\
-            sb.Replace("\"", "\\\""); // " -> \"
-
-            return sb.ToString();
-        }
+        return sb.ToString();
     }
 }

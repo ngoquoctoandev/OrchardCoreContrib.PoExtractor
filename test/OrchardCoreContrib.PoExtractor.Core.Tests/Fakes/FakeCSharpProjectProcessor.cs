@@ -1,26 +1,20 @@
-﻿using OrchardCoreContrib.PoExtractor.DotNet.CS;
+﻿using OrchardCoreContrib.PoExtractor.Abstractions;
+using OrchardCoreContrib.PoExtractor.DotNet.CS;
 
-namespace OrchardCoreContrib.PoExtractor.Tests.Fakes
+namespace OrchardCoreContrib.PoExtractor.Tests.Fakes;
+
+public class FakeCSharpProjectProcessor : IProjectProcessor
 {
-    public class FakeCSharpProjectProcessor : IProjectProcessor
+    private static readonly string _defaultPath = "ProjectFiles";
+
+    public void Process(string path, string basePath, LocalizableStringCollection localizableStrings)
     {
-        private static readonly string _defaultPath = "ProjectFiles";
+        if (string.IsNullOrEmpty(path)) path = _defaultPath;
 
-        public void Process(string path, string basePath, LocalizableStringCollection localizableStrings)
-        {
-            if (string.IsNullOrEmpty(path))
-            {
-                path = _defaultPath;
-            }
+        if (string.IsNullOrEmpty(basePath)) basePath = _defaultPath;
 
-            if (string.IsNullOrEmpty(basePath))
-            {
-                basePath = _defaultPath;
-            }
+        var csharpProjectProcessor = new CSharpProjectProcessor();
 
-            var csharpProjectProcessor = new CSharpProjectProcessor();
-
-            csharpProjectProcessor.Process(path, basePath, localizableStrings);
-        }
+        csharpProjectProcessor.Process(path, basePath, localizableStrings);
     }
 }

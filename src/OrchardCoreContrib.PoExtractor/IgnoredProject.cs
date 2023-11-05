@@ -1,26 +1,19 @@
-﻿using System.Collections.Generic;
+﻿namespace OrchardCoreContrib.PoExtractor;
 
-namespace OrchardCoreContrib.PoExtractor
+public class IgnoredProject
 {
-    public class IgnoredProject
+    private const string Docs      = "src\\dos";
+    private const string Cms       = "src\\OrchardCore.Cms.Web";
+    private const string Mvc       = "src\\OrchardCore.Mvc.Web";
+    private const string Templates = "src\\Templates";
+    private const string Test      = "test";
+
+    public static IEnumerable<string> ToList()
     {
-        public static readonly string Docs = "src\\dos";
-
-        public static readonly string Cms = "src\\OrchardCore.Cms.Web";
-
-        public static readonly string Mvc = "src\\OrchardCore.Mvc.Web";
-
-        public static readonly string Templates = "src\\Templates";
-
-        public static readonly string Test = "test";
-
-        public static IEnumerable<string> ToList()
-        {
-            yield return Docs;
-            yield return Cms;
-            yield return Mvc;
-            yield return Templates;
-            yield return Test;
-        }
+        yield return Docs;
+        yield return Cms;
+        yield return Mvc;
+        yield return Templates;
+        yield return Test;
     }
 }

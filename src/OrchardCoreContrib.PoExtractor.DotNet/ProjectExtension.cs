@@ -1,18 +1,17 @@
-﻿namespace OrchardCoreContrib.PoExtractor.DotNet
+﻿namespace OrchardCoreContrib.PoExtractor.DotNet;
+
+/// <summary>
+///     Represents a class that contains .NET projects extensions.
+/// </summary>
+public class ProjectExtension
 {
     /// <summary>
-    /// Represents a class that contains .NET projects extensions.
+    ///     Gets the CSharp project extension.
     /// </summary>
-    public class ProjectExtension
-    {
-        /// <summary>
-        /// Gets the CSharp project extension.
-        /// </summary>
-        public static readonly string CS = ".csproj";
+    public const string CS = ".csproj";
 
-        /// <summary>
-        /// Gets the Visual Basic project extension.
-        /// </summary>
-        public static readonly string VB = ".vbproj";
-    }
+    /// <summary>
+    ///     Gets the Visual Basic project extension.
+    /// </summary>
+    public const string VB = ".vbproj";
 }

@@ -1,7 +1,8 @@
 ﻿using Microsoft.CodeAnalysis.VisualBasic;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using OrchardCoreContrib.PoExtractor.DotNet.VB.MetadataProviders;
 
-namespace OrchardCoreContrib.PoExtractor.DotNet.VB.MetadataProviders.Tests;
+namespace OrchardCoreContrib.PoExtractor.DotNet.VB.Tests.MetadataProviders;
 
 public class VisualBasicMetadataProviderTests
 {

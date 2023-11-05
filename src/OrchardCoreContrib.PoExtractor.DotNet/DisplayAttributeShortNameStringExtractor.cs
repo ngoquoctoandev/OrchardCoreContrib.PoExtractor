@@ -1,20 +1,20 @@
-using Microsoft.CodeAnalysis;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.CodeAnalysis;
+using OrchardCoreContrib.PoExtractor.Abstractions;
 
-namespace OrchardCoreContrib.PoExtractor.DotNet
+namespace OrchardCoreContrib.PoExtractor.DotNet;
+
+/// <summary>
+///     Extracts localizable string from <see cref="DisplayAttribute" /> ShortName property.
+/// </summary>
+public class DisplayAttributeShortNameStringExtractor : DisplayAttributeStringExtractor
 {
     /// <summary>
-    /// Extracts localizable string from <see cref="DisplayAttribute"/> ShortName property.
+    ///     Creates a new instance of a <see cref="DisplayAttributeShortNameStringExtractor" />.
     /// </summary>
-    public class DisplayAttributeShortNameStringExtractor : DisplayAttributeStringExtractor
+    /// <param name="metadataProvider">The <see cref="IMetadataProvider{TNode}" />.</param>
+    public DisplayAttributeShortNameStringExtractor(IMetadataProvider<SyntaxNode> metadataProvider)
+        : base("ShortName", metadataProvider)
     {
-        /// <summary>
-        /// Creates a new instance of a <see cref="DisplayAttributeShortNameStringExtractor"/>.
-        /// </summary>
-        /// <param name="metadataProvider">The <see cref="IMetadataProvider{TNode}"/>.</param>
-        public DisplayAttributeShortNameStringExtractor(IMetadataProvider<SyntaxNode> metadataProvider)
-            : base("ShortName", metadataProvider)
-        {
-        }
     }
 }

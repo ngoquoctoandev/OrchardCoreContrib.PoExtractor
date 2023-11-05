@@ -1,45 +1,36 @@
 ﻿using Microsoft.CodeAnalysis;
-using System;
-using System.Collections.Generic;
+using OrchardCoreContrib.PoExtractor.Abstractions;
 
-namespace OrchardCoreContrib.PoExtractor.DotNet
+namespace OrchardCoreContrib.PoExtractor.DotNet;
+
+/// <summary>
+///     Traverses C# & VB AST and extracts localizable strings using provided collection of <see cref="IStringExtractor{TNode}" />
+/// </summary>
+public class ExtractingCodeWalker : SyntaxWalker
 {
+    private readonly IEnumerable<IStringExtractor<SyntaxNode>> _extractors;
+    private readonly LocalizableStringCollection               _strings;
+
     /// <summary>
-    /// Traverses C# & VB AST and extracts localizable strings using provided collection of <see cref="IStringExtractor{TNode}"/>
+    ///     Initializes a new instance of the <see cref="ExtractingCodeWalker" /> class.
     /// </summary>
-    public class ExtractingCodeWalker : SyntaxWalker
+    /// <param name="extractors">the collection of extractors to use</param>
+    /// <param name="strings">The <see cref="LocalizableStringCollection" /> where the results are saved.</param>
+    public ExtractingCodeWalker(IEnumerable<IStringExtractor<SyntaxNode>> extractors, LocalizableStringCollection strings)
     {
-        private readonly LocalizableStringCollection _strings;
-        private readonly IEnumerable<IStringExtractor<SyntaxNode>> _extractors;
+        _extractors = extractors ?? throw new ArgumentNullException(nameof(extractors));
+        _strings    = strings    ?? throw new ArgumentNullException(nameof(strings));
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExtractingCodeWalker"/> class.
-        /// </summary>
-        /// <param name="extractors">the collection of extractors to use</param>
-        /// <param name="strings">The <see cref="LocalizableStringCollection"/> where the results are saved.</param>
-        public ExtractingCodeWalker(IEnumerable<IStringExtractor<SyntaxNode>> extractors, LocalizableStringCollection strings)
-        {
-            _extractors = extractors ?? throw new ArgumentNullException(nameof(extractors));
-            _strings = strings ?? throw new ArgumentNullException(nameof(strings));
-        }
+    /// <inheritdoc />
+    public override void Visit(SyntaxNode node)
+    {
+        if (node is null) throw new ArgumentNullException(nameof(node));
 
-        /// <inheritdoc/>
-        public override void Visit(SyntaxNode node)
-        {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node));
-            }
+        base.Visit(node);
 
-            base.Visit(node);
-
-            foreach (var extractor in _extractors)
-            {
-                if (extractor.TryExtract(node, out var result))
-                {
-                    _strings.Add(result);
-                }
-            }
-        }
+        foreach (var extractor in _extractors)
+            if (extractor.TryExtract(node, out var result))
+                _strings.Add(result);
     }
 }

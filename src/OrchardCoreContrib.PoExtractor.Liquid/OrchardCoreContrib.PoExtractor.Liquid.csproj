@@ -1,16 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<AssemblyName>OrchardCoreContrib.PoExtractor.Liquid</AssemblyName>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>OrchardCoreContrib.PoExtractor.Liquid</AssemblyName>
-  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Fluid.Core" Version="2.5.0" />
+		<PackageReference Include="OrchardCore.DisplayManagement.Liquid" Version="1.7.2" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Fluid.Core" Version="2.0.13" />
-    <PackageReference Include="OrchardCore.DisplayManagement.Liquid" Version="1.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\OrchardCoreContrib.PoExtractor.Abstractions\OrchardCoreContrib.PoExtractor.Abstractions.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\OrchardCoreContrib.PoExtractor.Abstractions\OrchardCoreContrib.PoExtractor.Abstractions.csproj" />
+	</ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-# OrchardCoreContrib.PoExtractor
+﻿# OrchardCoreContrib.PoExtractor
 
 `OrchardCoreContrib.PoExtractor` is distributed as a dotnet global tool to extracts translatable strings from the C# and VB code, Razor templates and Liquid templates to POT (portable object template) files. It is designed to follow conventions used in the [OrchardCore](https://github.com/OrchardCMS/OrchardCore) project.
 
@@ -7,7 +7,7 @@
 Install with the following command:
 
 ```powershell
-dotnet tool install --global OrchardCoreContrib.PoExtractor
+dotnet tool install --global FSH.OrchardCoreContrib.PoExtractor
 ```
 
 ## Usage
@@ -43,7 +43,7 @@ Specifies the template engine to extract the translatable strings from. Default:
 ## Uninstallation
 
 ```powershell
-dotnet tool uninstall --global OrchardCoreContrib.PoExtractor
+dotnet tool uninstall --global FSH.OrchardCoreContrib.PoExtractor
 ```
 
 ## Limitations
@@ -163,6 +163,6 @@ msgstr ""
 
 **PoExtractor**
 
-https://github.com/lukaskabrt/PoExtractor
+https://github.com/ngoquoctoandev/OrchardCoreContrib.PoExtractor
 
-Lukas Kabrt
+ngoquoctoandev:Ngô Quốc Toản

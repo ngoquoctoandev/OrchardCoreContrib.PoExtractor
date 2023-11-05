@@ -1,9 +1,7 @@
-﻿namespace OrchardCoreContrib.PoExtractor
-{
-    public class Language
-    {
-        public static readonly string CSharp = "C#";
+﻿namespace OrchardCoreContrib.PoExtractor;
 
-        public static readonly string VisualBasic = "VB";
-    }
+public class Language
+{
+    public const string CSharp      = "C#";
+    public const string VisualBasic = "VB";
 }

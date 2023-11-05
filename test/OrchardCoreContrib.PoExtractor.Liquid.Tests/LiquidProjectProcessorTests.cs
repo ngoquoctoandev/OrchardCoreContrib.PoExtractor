@@ -1,30 +1,30 @@
+using OrchardCoreContrib.PoExtractor.Abstractions;
 using Xunit;
 
-namespace OrchardCoreContrib.PoExtractor.Liquid.Tests
+namespace OrchardCoreContrib.PoExtractor.Liquid.Tests;
+
+public class LiquidProjectProcessorTests
 {
-    public class LiquidProjectProcessorTests
+    private readonly LocalizableStringCollection _localizableStrings = new();
+    private readonly LiquidProjectProcessor      _processor          = new();
+
+    [Fact]
+    public void ExtractsStringFromLiquidProperty()
     {
-        private readonly LiquidProjectProcessor _processor = new();
-        private readonly LocalizableStringCollection _localizableStrings = new();
+        // Act
+        _processor.Process("ProjectFiles", "DummyBasePath", _localizableStrings);
 
-        [Fact]
-        public void ExtractsStringFromLiquidProperty()
-        {
-            // Act
-            _processor.Process("ProjectFiles", "DummyBasePath", _localizableStrings);
+        // Assert
+        Assert.Contains(_localizableStrings.Values, s => s.Text == "string in variable");
+    }
 
-            // Assert
-            Assert.Contains(_localizableStrings.Values, s => s.Text == "string in variable");
-        }
+    [Fact]
+    public void ExtractsStringFromLiquidExpression()
+    {
+        // Act
+        _processor.Process("ProjectFiles", "DummyBasePath", _localizableStrings);
 
-        [Fact]
-        public void ExtractsStringFromLiquidExpression()
-        {
-            // Act
-            _processor.Process("ProjectFiles", "DummyBasePath", _localizableStrings);
-
-            // Assert
-            Assert.Contains(_localizableStrings.Values, s => s.Text == "string in expression");
-        }
+        // Assert
+        Assert.Contains(_localizableStrings.Values, s => s.Text == "string in expression");
     }
 }
