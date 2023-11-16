@@ -23,7 +23,7 @@ public abstract class LocalizableStringExtractor<TNode> : IStringExtractor<TNode
     /// <param name="text">The localized text.</param>
     /// <param name="textPlural">The pluralization form for the localized text.</param>
     /// <param name="node">The node in which to get the localized string information.</param>
-    protected LocalizableStringOccurence? CreateLocalizedString(string text, string? textPlural, TNode node)
+    protected LocalizableStringOccurence CreateLocalizedString(string text, string? textPlural, TNode node)
     {
         if (string.IsNullOrEmpty(text)) throw new ArgumentException($"'{nameof(text)}' cannot be null or empty.", nameof(text));
 
